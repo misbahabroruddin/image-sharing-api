@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                      String      @id @unique @db.VarChar(50)
+  first_name              String      @db.VarChar(255)
+  last_name               String?     @db.VarChar(255)
+  username                String      @db.VarChar(255) @unique
+  email                   String      @db.VarChar(255) @unique
+  password                String      @db.VarChar(255)
+  profile_picture_url     String      @db.VarChar(255) @default("https://res.cloudinary.com/dnk0swp28/image/upload/v1695907715/vvih7lpecubkouqmhqoc.png")
+  images                  Image[]
+  likes                   Like[]
+  comment                 Comment[]
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+
+  @@map("users") 
+}
+
+model Image {
+  id                      String      @id @unique @db.VarChar(50)
+  title                   String      @db.VarChar(255)
+  description             String?     @db.VarChar(255)
+  image_url               String      @db.VarChar(255)
+  user                    User       @relation(fields: [user_id], references: [id])
+  user_id                 String      @unique
+  likes                   Like[]
+  comment                 Comment[]
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+
+  @@map("images") 
+}
+
+model Like {
+  user                    User       @relation(fields: [user_id], references: [id]) 
+  user_id                 String
+  image                   Image      @relation(fields: [image_id], references: [id])
+  image_id                String   
+
+  @@id([user_id, image_id])
+  @@map("likes")   
+}
+
+model Comment {
+  id                      Int        @id @default(autoincrement())
+  comment                 String     @db.VarChar(255)
+  image                   Image      @relation(fields: [image_id], references: [id])
+  image_id                String
+  user                    User       @relation(fields: [user_id], references: [id]) 
+  user_id                 String
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+
+  @@map("comments")
+}
+
