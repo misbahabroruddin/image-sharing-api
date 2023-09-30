@@ -65,7 +65,7 @@ class AuthController {
       res.status(201).json({
         status: 201,
         success: true,
-        message: 'Successfully log in',
+        message: 'Successfully register',
         data: user.id,
       });
     } catch (error: any) {
