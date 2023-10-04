@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
@@ -18,6 +19,7 @@ model User {
   email                   String      @db.VarChar(255) @unique
   password                String      @db.VarChar(255)
   profile_picture_url     String      @db.VarChar(255) @default("https://res.cloudinary.com/dnk0swp28/image/upload/v1695907715/vvih7lpecubkouqmhqoc.png")
+  image_name              String?      @db.VarChar(255)
   images                  Image[]
   likes                   Like[]
   comment                 Comment[]
@@ -32,8 +34,9 @@ model Image {
   title                   String      @db.VarChar(255)
   description             String?     @db.VarChar(255)
   image_url               String      @db.VarChar(255)
-  user                    User       @relation(fields: [user_id], references: [id])
-  user_id                 String      @unique
+  image_name              String?      @db.VarChar(255)
+  author                  User        @relation(fields: [author_id], references: [id])  
+  author_id               String        
   likes                   Like[]
   comment                 Comment[]
   createdAt               DateTime    @default(now())

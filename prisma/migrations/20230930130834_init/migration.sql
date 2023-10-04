@@ -7,6 +7,7 @@ CREATE TABLE "users" (
     "email" VARCHAR(255) NOT NULL,
     "password" VARCHAR(255) NOT NULL,
     "profile_picture_url" VARCHAR(255) NOT NULL DEFAULT 'https://res.cloudinary.com/dnk0swp28/image/upload/v1695907715/vvih7lpecubkouqmhqoc.png',
+    "image_name" VARCHAR(255),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -19,7 +20,8 @@ CREATE TABLE "images" (
     "title" VARCHAR(255) NOT NULL,
     "description" VARCHAR(255),
     "image_url" VARCHAR(255) NOT NULL,
-    "user_id" TEXT NOT NULL,
+    "image_name" VARCHAR(255),
+    "author_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -58,11 +60,8 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "images_id_key" ON "images"("id");
 
--- CreateIndex
-CREATE UNIQUE INDEX "images_user_id_key" ON "images"("user_id");
-
 -- AddForeignKey
-ALTER TABLE "images" ADD CONSTRAINT "images_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "images" ADD CONSTRAINT "images_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "likes" ADD CONSTRAINT "likes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
